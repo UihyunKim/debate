@@ -1,0 +1,6 @@
+/.vscode
+/node_modules
+/src/test
+/src/psd
+*.sh
+*.code-workspace

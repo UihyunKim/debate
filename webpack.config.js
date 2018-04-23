@@ -5,6 +5,14 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const dest = '/opt/lampp/htdocs/wp-multi/wp-content/themes/jesusdebate';
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 
+const pathsToClean = ['jesusdebate'];
+
+const cleanOptions = {
+  root: '/opt/lampp/htdocs/wp-multi/wp-content/themes',
+  verbose: true,
+  dry: false
+}
+
 module.exports = {
   entry: './src/js/main.js',
   module: {
@@ -60,6 +68,7 @@ module.exports = {
     path: path.resolve(__dirname, dest + '/inc/js')
   },
   plugins: [
+    new CleanWebpackPlugin(pathsToClean, cleanOptions),
     new webpack.ProvidePlugin({$: 'jquery', jQuery: 'jquery', 'window.jQuery': 'jquery'}),
     new CopyWebpackPlugin([
       {

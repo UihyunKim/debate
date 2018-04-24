@@ -91,7 +91,9 @@ module.exports = {
         to: dest,
         flatten: true
       }
-    ], {copyUnmodified: true}),
+    ], {
+      copyUnmodified: true}
+    ),
     new MiniCssExtractPlugin({
       filename: "../styles/main.css"
     })

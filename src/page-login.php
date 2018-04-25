@@ -1,6 +1,6 @@
 <?php get_header(); ?>
 
-<?php $login  = (isset($_GET['login']) ) ? $_GET['login'] : 0; ?>
+<!-- <?php $login  = (isset($_GET['login']) ) ? $_GET['login'] : 0; ?>
 
 <?php if ( $login === "failed" ): ?>
   <p class="login-msg"><strong>오류:</strong> 아이디 혹은 패스워드를 다시 확인해 주세요.</p>
@@ -45,6 +45,6 @@
     <input type="hidden" name="redirect_to" value="<?php bloginfo('url'); ?>" />
     <input type="hidden" name="user-cookie" value="1" />
   </div>
-</form>
+</form> -->
 
 <?php get_footer(); ?>

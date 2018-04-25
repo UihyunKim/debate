@@ -31,10 +31,6 @@ import 'animate.css';
     $(window)
       .resize(function (e) {
         windowWidth = $(window).width();
-        navColor();
-        imgCrop();
-        owl();
-        navToggle('resize');
       });
   }
 

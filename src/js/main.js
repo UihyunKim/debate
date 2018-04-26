@@ -18,35 +18,30 @@ import 'animate.css';
 // import faUserCircle from '@fortawesome/fontawesome-free-solid/faUserCircle';
 // fontawesome.library.add(faUserCircle);
 
-(function ($) {
+// (function ($) {
+//   $(document).ready(function () {
+//   });
+// })(jQuery);
 
-  let windowWidth = $(window).width();
+function run() {
+  // do something
+  const regex = /<!--JSON\[(.*)?\]JSON/;
+  const qStr = document.querySelector('body').innerHTML.match(regex)[1];
+  const qObj = JSON.parse(qStr);
+  
+  console.log(qObj);
+  
+  console.log(QUIZ);
+  
+  
+  
+}
 
-  const device = {
-    sm: 576,
-    md: 768
-  }
-
-  const resize = function () {
-    $(window)
-      .resize(function (e) {
-        windowWidth = $(window).width();
-      });
-  }
-
-  const scrollTop = function () {
-    $("a[href='#top']")
-      .click(function () {
-        $("html, body").animate({
-          scrollTop: 0
-        }, "slow");
-        return false;
-      });
-  }
-
-  $(document).ready(function () {
-    resize();
-    $('#bootstrap-overrides').css('visibility', 'visible');
-    scrollTop();
-  });
-})(jQuery);
+// in case the document is already rendered
+if (document.readyState != 'loading') run();
+// modern browsers
+else if (document.addEventListener) document.addEventListener('DOMContentLoaded', run);
+// IE <= 8
+else document.attachEvent('onreadystatechange', function () {
+  if (document.readyState == 'complete') run();
+});

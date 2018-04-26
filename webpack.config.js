@@ -15,6 +15,10 @@ const cleanOptions = {
 
 module.exports = {
   entry: './src/js/main.js',
+  output: {
+    path: path.resolve(__dirname, dest + '/inc/js'),
+    filename: 'bundle.js',
+  },
   module: {
     rules: [
       {
@@ -62,10 +66,6 @@ module.exports = {
         loader: 'url-loader?limit=100000'
       }
     ]
-  },
-  output: {
-    filename: 'bundle.js',
-    path: path.resolve(__dirname, dest + '/inc/js')
   },
   plugins: [
     new CleanWebpackPlugin(pathsToClean, cleanOptions),

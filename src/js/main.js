@@ -4,6 +4,10 @@ window.$ = $;
 import 'bootstrap';
 import '../sass/style.scss';
 import 'animate.css';
+import React from 'react';
+import ReactDOM from 'react-dom';
+import App from '../components/App';
+
 // import 'fullpage.js'
 // import 'fullpage.js/dist/jquery.fullpage.css'
 // import Shuffle from 'shufflejs'
@@ -23,14 +27,14 @@ import 'animate.css';
 //   });
 // })(jQuery);
 
+ReactDOM.render(
+  <App />,
+  document.getElementById('root')
+);
+
+
 function run() {
   // do something
-  const regex = /<!--JSON\[(.*)?\]JSON/;
-  const qStr = document.querySelector('body').innerHTML.match(regex)[1];
-  const qObj = JSON.parse(qStr);
-  
-  console.log(qObj);
-  
   console.log(QUIZ);
   
   

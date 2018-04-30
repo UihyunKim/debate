@@ -1,12 +1,16 @@
-import $ from 'jquery';
-window.jQuery = $;
-window.$ = $;
+// import $ from 'jquery';
+// window.jQuery = $;
+// window.$ = $;
 import 'bootstrap';
 import '../sass/style.scss';
 import 'animate.css';
+
+// REACT REDUX
 import React from 'react';
-import ReactDOM from 'react-dom';
-import App from './components/App';
+import { render } from 'react-dom';
+import { Provider } from 'react-redux';
+import store from './store/store';
+import QuizApp from './components/quiz/QuizApp';
 
 // import 'fullpage.js'
 // import 'fullpage.js/dist/jquery.fullpage.css'
@@ -27,15 +31,17 @@ import App from './components/App';
 //   });
 // })(jQuery);
 
-ReactDOM.render(
-  <App />,
-  document.getElementById('root')
+render(
+  <Provider store={store}>
+    <QuizApp />
+  </Provider>,
+  document.getElementById('app')
 );
 
 
 function run() {
   // do something
-  console.log(QUIZ);
+  // console.log('ready');
   
   
   

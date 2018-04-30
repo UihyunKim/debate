@@ -6,10 +6,10 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "server": "sudo /opt/lampp/lampp start;",
-    "server-restart": "sudo /opt/lampp/lampp restart;",
+    "server:restart": "sudo /opt/lampp/lampp restart;",
     "start": "sudo /opt/lampp/lampp start; gulp watch;",
     "dev": "webpack --mode development",
-    "dev-watch": "webpack --mode development --watch",
+    "dev:watch": "webpack --mode development --watch",
     "build": "webpack --mode production ./src/js/main.js --output ./dist/bundle.js"
   },
   "author": "KIM Uihyun",

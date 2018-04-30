@@ -6,7 +6,7 @@ import '../sass/style.scss';
 import 'animate.css';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from '../components/App';
+import App from './components/App';
 
 // import 'fullpage.js'
 // import 'fullpage.js/dist/jquery.fullpage.css'

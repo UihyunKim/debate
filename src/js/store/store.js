@@ -4,7 +4,7 @@ import rootReducer from '../reducers/reducers';
 
 const store = createStore(
   rootReducer,
-  { articles: [] },
+  { articles: [], quizzes: [] },
   applyMiddleware(logger)
 );
 

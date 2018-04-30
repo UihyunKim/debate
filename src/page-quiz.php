@@ -23,6 +23,6 @@ echo"<script type=\"text/javascript\">
     </script>";
 ?>
 
-<div id="root"></div>
+<div id="app"></div>
 
 <?php get_footer(); ?>

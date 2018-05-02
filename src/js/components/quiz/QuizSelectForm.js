@@ -53,6 +53,9 @@ class ConnectedSelectForm extends Component {
   }
 }
 
-const QuizSelectForm = connect(null, mapDispatchToProps)(ConnectedSelectForm);
+const QuizSelectForm = connect(
+  null, 
+  mapDispatchToProps
+)(ConnectedSelectForm);
 
 export default QuizSelectForm;

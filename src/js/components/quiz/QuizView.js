@@ -9,7 +9,8 @@ import QuizSelect from './QuizSelect';
 import { getRandomInt } from '../../constants/functions';
 
 import uuidv1 from 'uuid';
-import { Map, List } from 'immutable';
+import update from 'immutability-helper';
+
 
 const mapDispatchToProps = dispatch => {
   return {
@@ -23,7 +24,7 @@ class QuizInit extends Component {
   }
 
   componentWillMount() {
-    // Here is fetch(or axios) space
+    // Fetch(or axios) space
     const QuizMap = () => {
 
       // marking one quiz as try:true
@@ -33,13 +34,15 @@ class QuizInit extends Component {
         const answerId = uuidv1();
         const answerEx = el.answer.join();
 
-        const allEx = el.answer.concat(el.example).map((item, idx) => {
-          return (
-            idx === 0 ?
-              { id: answerId, ex: answerEx } :
-              { id: uuidv1(), ex: item }
-          )
-        });
+        const allEx = el.answer
+          .concat(el.example)
+          .map((item, idx) => {
+            return (
+              idx === 0 ?
+                { id: answerId, ex: answerEx } :
+                { id: uuidv1(), ex: item }
+            )
+          });
 
         return ({
           id: uuidv1(),

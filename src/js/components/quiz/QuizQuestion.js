@@ -6,7 +6,7 @@ import uuidv1 from 'uuid';
 import { Map, List } from 'immutable';
 
 const mapStateToProps = state => {
-  return { tryQuiz: state.quizzes[0].filter(q => q.try) };
+  return { tryQuiz: state.quizzes.filter(q => q.try) };
 }
 
 const ConnectedQuiz = ({ tryQuiz }) => (

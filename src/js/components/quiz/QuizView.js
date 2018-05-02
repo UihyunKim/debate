@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
-import { initQuizApp } from '../../actions/actions';
+import { initQuizApp } from '../../actions/quiz-actions';
 // import QuizMap from './QuizMap';
 import QuizQuestion from './QuizQuestion';
 import QuizSelect from './QuizSelect';

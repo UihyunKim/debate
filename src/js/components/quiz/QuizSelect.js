@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { updateQuiz } from '../../actions/actions';
+import { successQuiz, failQuiz, skipQuiz } from '../../actions/quiz-actions';
 import PropTypes from 'prop-types';
 import update from 'immutability-helper';
 
@@ -16,7 +16,9 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   console.log('Dispatch -> props');
   return {
-    updateQuiz: select => dispatch(updateQuiz(select))
+    onSuccessQuiz: select => dispatch(successQuiz(select)),
+    onFailQuiz: select => dispatch(failQuiz(select)),
+    onSkipQuiz: select => dispatch(skipQuiz(select)),
   }
 }
 
@@ -27,6 +29,7 @@ class ConnectedSelect extends Component {
 
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleSkip = this.handleSkip.bind(this);
   }
 
   componentWillMount() {
@@ -34,6 +37,11 @@ class ConnectedSelect extends Component {
       console.log("=== componentWillMount ===");
       console.log(this.state);
     })
+  }
+  
+  
+  handleSkip(e) {
+    this.props.onSkipQuiz({ id: this.props.curQuiz.id });
   }
 
   handleChange(e) {
@@ -51,9 +59,9 @@ class ConnectedSelect extends Component {
   handleSubmit(e) {
     e.preventDefault();
     if (this.props.curQuiz.answer === this.state.tryAnswer) {
-      this.props.updateQuiz({ id: this.props.curQuiz.id, result: 'success' })
+      this.props.onSuccessQuiz({ id: this.props.curQuiz.id })
     } else {
-      this.props.updateQuiz({ id: this.props.curQuiz.id, result: 'fail' })
+      this.props.onFailQuiz({ id: this.props.curQuiz.id })
     }
     console.log('=== handle Submit ========')
     console.log('----------- this.props ---')
@@ -92,7 +100,9 @@ class ConnectedSelect extends Component {
 
         {/* CHECK PANNEL */}
         <div>
-          <button className="btn btn-primary">
+          <button 
+            className="btn btn-primary"
+            onClick={this.handleSkip}>
             건너띄기
           </button>
           <button

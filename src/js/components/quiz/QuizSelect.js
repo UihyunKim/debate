@@ -9,9 +9,7 @@ import uuidv1 from 'uuid';
 const mapStateToProps = state => {
   console.log('State -> props');
   return {
-    tryQuiz: state.quizzes.filter(q => {
-      return q.try
-    })[0],
+    curQuiz: state.quizApp.curQuiz,
   };
 }
 
@@ -32,14 +30,10 @@ class ConnectedSelect extends Component {
   }
 
   componentWillMount() {
-    this.setState({id: this.props.tryQuiz.id}, () => {
+    this.setState({id: this.props.curQuiz.id}, () => {
       console.log("=== componentWillMount ===");
       console.log(this.state);
-      
     })
-    
-    // this.setState({ ...this.props.tryQuiz }, () => {
-    // });
   }
 
   handleChange(e) {
@@ -56,10 +50,10 @@ class ConnectedSelect extends Component {
   
   handleSubmit(e) {
     e.preventDefault();
-    if (this.props.tryQuiz.answer === this.state.tryAnswer) {
-      this.props.updateQuiz({ id: this.props.tryQuiz.id, result: 'success' })
+    if (this.props.curQuiz.answer === this.state.tryAnswer) {
+      this.props.updateQuiz({ id: this.props.curQuiz.id, result: 'success' })
     } else {
-      this.props.updateQuiz({ id: this.props.tryQuiz.id, result: 'fail' })
+      this.props.updateQuiz({ id: this.props.curQuiz.id, result: 'fail' })
     }
     console.log('=== handle Submit ========')
     console.log('----------- this.props ---')
@@ -69,13 +63,13 @@ class ConnectedSelect extends Component {
   }
 
   render() {
-    const tryQuiz = this.props.tryQuiz;
+    const curQuiz = this.props.curQuiz;
     return (
       <div>
         {/* EXAMPLES */}
         <form id="selectForm" onSubmit={this.handleSubmit}>
           {
-            tryQuiz.allExs.map(ex => (
+            curQuiz.allExams.map(ex => (
               <div className="form-check" key={ex.id}>
                 <input
                   className="form-check-input"
@@ -121,6 +115,6 @@ const QuizSelect = connect( mapStateToProps, mapDispatchToProps )(ConnectedSelec
 export default QuizSelect;
 
 // ConnectedQuiz.propTypes = {
-//   tryQuiz: PropTypes.array.isRequired,
+//   curQuiz: PropTypes.array.isRequired,
 // }
 

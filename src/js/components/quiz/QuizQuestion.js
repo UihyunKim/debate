@@ -6,12 +6,12 @@ import uuidv1 from 'uuid';
 import { Map, List } from 'immutable';
 
 const mapStateToProps = state => {
-  return { tryQuiz: state.quizzes.filter(q => q.try) };
+  return { curQuiz: state.quizApp.curQuiz };
 }
 
-const ConnectedQuiz = ({ tryQuiz }) => (
+const ConnectedQuiz = ({ curQuiz }) => (
   <div>
-    Q: {tryQuiz[0].question}
+    Q: {curQuiz.question}
   </div>
 )
 
@@ -19,6 +19,6 @@ const QuizQuestion = connect(mapStateToProps)(ConnectedQuiz);
 
 export default QuizQuestion;
 
-ConnectedQuiz.propTypes = {
-  tryQuiz: PropTypes.array.isRequired,
-}
+// ConnectedQuiz.propTypes = {
+//   curQuiz: PropTypes.array.isRequired,
+// }

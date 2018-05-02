@@ -6,9 +6,9 @@ export const addArticle = article => (
   }
 )
 
-export const addQuiz = quiz => (
+export const initQuizApp = quiz => (
   {
-    type: 'ADD_QUIZ', payload: quiz
+    type: 'INIT_QUIZ_APP', payload: quiz
   }
 )
 

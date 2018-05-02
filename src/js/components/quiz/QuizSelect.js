@@ -7,14 +7,16 @@ import update from 'immutability-helper';
 import uuidv1 from 'uuid';
 
 const mapStateToProps = state => {
-  const thisQuiz = state.quizzes.filter(q => q.try);
-  const quizzes = state.quizzes;
+  console.log('State -> props');
   return {
-    tryQuiz: thisQuiz,
+    tryQuiz: state.quizzes.filter(q => {
+      return q.try
+    })[0],
   };
 }
 
 const mapDispatchToProps = dispatch => {
+  console.log('Dispatch -> props');
   return {
     updateQuiz: select => dispatch(updateQuiz(select))
   }
@@ -30,40 +32,44 @@ class ConnectedSelect extends Component {
   }
 
   componentWillMount() {
-    this.setState({...this.props.tryQuiz[0]}, () => {
-      // console.log(this.state);
-      // console.log(this.props);      
-    });
+    this.setState({id: this.props.tryQuiz.id}, () => {
+      console.log("=== componentWillMount ===");
+      console.log(this.state);
+      
+    })
+    
+    // this.setState({ ...this.props.tryQuiz }, () => {
+    // });
   }
 
   handleChange(e) {
-    // this.setState({ id: e.target.value }, () => {
-    //   console.log(this.state);
-    // })
     this.setState(
-      update(
-        this.state, 
-        {tryAnswer: {$set: e.target.value}}
-      ), 
-      () => {
-        // console.log(this.state);
+      update(this.state, { tryAnswer: { $set: e.target.value } }), () => {
+        console.log('=== handle Change ========')
+        console.log('----------- this.props ---')
+        console.log(this.props);
+        console.log('----------- this.state ---')
+        console.log(this.state);
       }
     );
-    // console.log(e.target.value);
   }
-
+  
   handleSubmit(e) {
     e.preventDefault();
-    if (this.state.answer === this.state.tryAnswer) {
-      console.log("success")
-      this.props.updateQuiz({id: this.props.tryQuiz[0].id, todo: 'success' })
+    if (this.props.tryQuiz.answer === this.state.tryAnswer) {
+      this.props.updateQuiz({ id: this.props.tryQuiz.id, result: 'success' })
     } else {
-      console.log("fail")
+      this.props.updateQuiz({ id: this.props.tryQuiz.id, result: 'fail' })
     }
+    console.log('=== handle Submit ========')
+    console.log('----------- this.props ---')
+    console.log(this.props);
+    console.log('----------- this.state ---')
+    console.log(this.state);
   }
 
   render() {
-    const tryQuiz = this.props.tryQuiz[0];
+    const tryQuiz = this.props.tryQuiz;
     return (
       <div>
         {/* EXAMPLES */}
@@ -80,8 +86,8 @@ class ConnectedSelect extends Component {
                   onChange={this.handleChange}
                 // checked={}
                 />
-                <label 
-                  className="form-check-label" 
+                <label
+                  className="form-check-label"
                   htmlFor={ex.id}>
                   {ex.ex}
                 </label>
@@ -110,10 +116,7 @@ class ConnectedSelect extends Component {
   }
 }
 
-const QuizSelect = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(ConnectedSelect);
+const QuizSelect = connect( mapStateToProps, mapDispatchToProps )(ConnectedSelect);
 
 export default QuizSelect;
 

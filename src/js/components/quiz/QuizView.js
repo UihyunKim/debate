@@ -50,7 +50,7 @@ class QuizInit extends Component {
           allExs: allEx,
           answer: answerId,
           try: elIdx === i ? true : false,
-          success: null
+          result: ''
         });
       });
 

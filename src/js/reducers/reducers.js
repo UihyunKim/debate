@@ -6,41 +6,39 @@ const initialState = {
   quizzes: [],
 }
 
-const rootReducer = (
-  state = initialState, 
-  {type, payload}
-  ) => {
-    switch (type) {
-      case 'ADD_ARTICLE':
-        return { 
-          ...state, 
-          articles: [...state.articles, payload] 
-        };
-      case 'ADD_QUIZ':
-        return { 
-          ...state, 
-          // quizzes: [...state.quizzes, payload]
-          quizzes: update(state.quizzes, {$push: payload})
-        };
-      case 'UPDATE_QUIZ':
-        const id = payload.id; // the question id
-        
-        if (payload.todo === 'success') {
-          const newQuizzes = state.quizzes.map((quiz) => {
-            if(quiz.id === id) {
-              return update( quiz, { success: { $set: true } });
-            }
-            return quiz;
-          })
-          
-          return { 
-            ...state, 
-            quizzes: newQuizzes
-          };
+const rootReducer = (state = initialState, { type, payload }) => {
+  switch (type) {
+    case 'ADD_ARTICLE':
+      return {
+        ...state,
+        articles: [...state.articles, payload]
+      };
+    case 'ADD_QUIZ':
+      return {
+        ...state,
+        // quizzes: [...state.quizzes, payload]
+        quizzes: update(state.quizzes, { $push: payload })
+      };
+    case 'UPDATE_QUIZ':
+      const id = payload.id; // the question id
+      
+      // result: {success, fail, skip}
+      const newQuizzes = state.quizzes.map((quiz) => {
+        if (quiz.id === id) {
+          return update(quiz, { result: { $set: payload.result } });
         }
-      default:
-        return state;
-    }
+        return quiz;
+      })
+      
+      return {
+        ...state,
+        quizzes: newQuizzes
+      };
+      
+      
+    default:
+      return state;
   }
+}
 
 export default rootReducer;

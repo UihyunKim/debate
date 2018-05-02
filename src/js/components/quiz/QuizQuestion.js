@@ -1,25 +1,24 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 import uuidv1 from 'uuid';
 import { Map, List } from 'immutable';
 
 const mapStateToProps = state => {
-  return { quizzes: state.quizzes };
+  return { tryQuiz: state.quizzes[0].filter(q => q.try) };
 }
 
-const ConnectedQuiz = ({ quizzes }) => (
-  <ul>
-    {
-      quizzes[0].map(quiz => (
-        <li key={quiz.id}>
-          {quiz.question}
-        </li>
-      ))
-    }
-  </ul>
+const ConnectedQuiz = ({ tryQuiz }) => (
+  <div>
+    Q: {tryQuiz[0].question}
+  </div>
 )
 
 const QuizQuestion = connect(mapStateToProps)(ConnectedQuiz);
 
 export default QuizQuestion;
+
+ConnectedQuiz.propTypes = {
+  tryQuiz: PropTypes.array.isRequired,
+}

@@ -7,7 +7,8 @@ import uuidv1 from 'uuid';
 const mapStateToProps = state => {
   const current = 
     state.quizApp.quizzes.filter(quiz => (quiz.status.current === 'try'))[0] ||
-    state.quizApp.quizzes.filter(quiz => (quiz.status.current === 'retry'))[0];
+    state.quizApp.quizzes.filter(quiz => (quiz.status.current === 'retry'))[0]
+    
   return { 
     curQuiz: current 
   };

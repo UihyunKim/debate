@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { successQuiz, failQuiz, skipQuiz } from '../../actions/quiz-actions';
+import { successQuiz, failQuiz, skipQuiz, nextQuiz } from '../../actions/quiz-actions';
 import PropTypes from 'prop-types';
 import update from 'immutability-helper';
 
@@ -22,6 +22,7 @@ const mapDispatchToProps = dispatch => {
     onSuccessQuiz: select => dispatch(successQuiz(select)),
     onFailQuiz: select => dispatch(failQuiz(select)),
     onSkipQuiz: select => dispatch(skipQuiz(select)),
+    onNextQuiz: select => dispatch(nextQuiz(select)),
   }
 }
 
@@ -33,7 +34,7 @@ class ConnectedSelect extends Component {
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleSkip = this.handleSkip.bind(this);
-    // this.handleNext = this.handleNext.bind(this);
+    this.handleNext = this.handleNext.bind(this);
   }
 
   componentWillMount() {
@@ -45,15 +46,16 @@ class ConnectedSelect extends Component {
   
   handleSkip(e) {
     this.props.onSkipQuiz({ id: this.props.curQuiz.id });
+    this.setState( update(this.state, { select: {$set: ''}}) )
   }
   
-  // handleNext(e) {
-  //   this.props.onNextQuiz({ id: this.props.curQuiz.id });
-  // }
+  handleNext(e) {
+    this.props.onNextQuiz({ id: this.props.curQuiz.id });
+  }
 
   handleChange(e) {
     this.setState(
-      update(this.state, { tryAnswer: { $set: e.target.value } }), () => {
+      update(this.state, { select: { $set: e.target.value } }), () => {
         // console.log('=== handle Change ========')
         // console.log('----------- this.props ---')
         // console.log(this.props);
@@ -65,7 +67,7 @@ class ConnectedSelect extends Component {
   
   handleSubmit(e) {
     e.preventDefault();
-    if (this.props.curQuiz.answer === this.state.tryAnswer) {
+    if (this.props.curQuiz.answer === this.state.select) {
       this.props.onSuccessQuiz({ id: this.props.curQuiz.id })
     } else {
       this.props.onFailQuiz({ id: this.props.curQuiz.id })
@@ -118,14 +120,14 @@ class ConnectedSelect extends Component {
             className="btn btn-primary"
             type="submit"
             form="selectForm"
-            disabled={!this.state.tryAnswer}
+            disabled={!this.state.select}
           >
             확인
           </button>
           <button
             className="btn btn-primary"
             onClick={this.handleNext}
-            // disabled={!this.state.tryAnswer}
+            disabled={!this.props.curQuiz.status.result.length}
           >
             다음
           </button>

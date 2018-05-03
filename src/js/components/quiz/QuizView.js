@@ -48,7 +48,7 @@ const quizzesMap = () => {
       explanation: el.explanation.join(),
       try: elIdx === i ? true : false,
       status: {
-        current: 'new',  // current: 'new', 'try', 'solve', 'skip'
+        current: 'new',  // current: 'new', 'try', 'done', 'skip'
         result: '',   // result: '', 'success', 'fail'
       },
       // result: '',
@@ -83,6 +83,7 @@ class QuizInit extends Component {
       session: {
         stage: sessionNo,
         end: false,
+        result: ''
       },
       score: {
         goal: goalNo,

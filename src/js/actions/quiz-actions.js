@@ -21,3 +21,9 @@ export const skipQuiz = quiz => (
     type: 'SKIP_QUIZ', payload: quiz
   }
 )
+
+export const nextQuiz = quiz => (
+  {
+    type: 'NEXT_QUIZ', payload: quiz
+  }
+)

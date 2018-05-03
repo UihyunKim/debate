@@ -9,7 +9,7 @@ export const getRandomInt = (min, max) => (
 )
 
 // marking one random quiz's status into try
-export const markingTheQuizTry = (quizzes) => {
+export const markingNewQuizToTry = (quizzes) => {
   // find new quizzes
   const findNewQs = (quizzes) => {
     return quizzes.filter(quiz => {
@@ -17,15 +17,51 @@ export const markingTheQuizTry = (quizzes) => {
     });
   }
   const newQuizzes = findNewQs(quizzes);
-  const theNewIdx = getRandomInt(0, newQuizzes.length);
-  const theNewId = newQuizzes[theNewIdx].id;
   
-  // marking the new quiz as status: try
-  const tryQs = quizzes.map(quiz => {
-    return quiz.id === theNewId ?
-      update(quiz, { status: { current: { $set: 'try' } } }) :
-      quiz
-  });
+  // return until new quiz exists
+  if (newQuizzes.length) {
+    const theNewIdx = getRandomInt(0, newQuizzes.length);
+    const theNewId = newQuizzes[theNewIdx].id;
+    
+    // marking the new quiz as status: try
+    const tryQs = quizzes.map(quiz => {
+      return quiz.id === theNewId ?
+        update(quiz, { status: { current: { $set: 'try' } } }) :
+        quiz
+    });
+    
+    return tryQs;
+  }
   
-  return tryQs;
+  // NOT having new any more
+  return null;
+}
+
+// marking one skip quiz's status into try
+export const markingSkipQuizToTry = (quizzes) => {
+  // find Skip quizzes
+  const findSkipQs = (quizzes) => {
+    return quizzes.filter(quiz => {
+      return quiz.status.current === 'skip';
+    });
+  }
+  const skipQuizzes = findSkipQs(quizzes);
+  
+  // return until skip quiz exists
+  if (skipQuizzes.length) {
+    const theSkipIdx = getRandomInt(0, skipQuizzes.length);
+    const theSkipId = skipQuizzes[theSkipIdx].id;
+    
+    // marking the skip quiz as status: try
+    const tryQs = quizzes.map(quiz => {
+      return quiz.id === theSkipId ?
+        update(quiz, { status: { current: { $set: 'retry' } } }) :
+        quiz
+    });
+    
+    return tryQs;
+  }
+  
+  // NOT having new any more
+  return null;
 }

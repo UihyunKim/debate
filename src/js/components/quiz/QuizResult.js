@@ -15,13 +15,14 @@ const mapStateToProps = state => {
 
 const ConnectedQuiz = ({ curQuiz }) => (
   <div>
-    Q: {curQuiz.question}
+    <h3>정답: {curQuiz.status.result}</h3>
+    <h3>해설: {curQuiz.explanation}</h3>
   </div>
 )
 
-const QuizQuestion = connect(mapStateToProps)(ConnectedQuiz);
+const QuizResult = connect(mapStateToProps)(ConnectedQuiz);
 
-export default QuizQuestion;
+export default QuizResult;
 
 // ConnectedQuiz.propTypes = {
 //   curQuiz: PropTypes.array.isRequired,

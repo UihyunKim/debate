@@ -1,5 +1,5 @@
 import update from 'immutability-helper';
-
+import { markingNewQuizToTry, markingSkipQuizToTry } from '../constants/functions';
 
 const initialState = {
   session: {
@@ -25,7 +25,7 @@ const quizReducer = (state = initialState, { type, payload }) => {
     case 'SUCCESS_QUIZ':
       const upSuQuizzes = state.quizzes.map(quiz => (
         quiz.id === payload.id ?
-          update(quiz, { result: { $set: 'success' } })
+          update(quiz, {status: {result: { $set: 'success' }} })
           : quiz
       ))
 
@@ -49,11 +49,10 @@ const quizReducer = (state = initialState, { type, payload }) => {
         return newState;
       }
 
-
     case 'FAIL_QUIZ':
       const upFaQuizzes = state.quizzes.map(quiz => (
         quiz.id === payload.id ?
-          update(quiz, { result: { $set: 'fail' } })
+          update(quiz, {status: {result: { $set: 'fail' }} })
           : quiz
       ));
       return update(state, {
@@ -62,12 +61,24 @@ const quizReducer = (state = initialState, { type, payload }) => {
       });
 
     case 'SKIP_QUIZ':
+      // marking the quiz's result as 'skip'
       const upSkQuizzes = state.quizzes.map(quiz => (
         quiz.id === payload.id ?
-          update(quiz, { result: { $set: 'skip' } })
+          update(quiz, {status: { current: { $set: 'skip' }} })
           : quiz
       ));
-      return update(state, { quizzes: { $set: upSkQuizzes } });
+      
+      // marking next quiz as 'try'
+      
+      const nextTryQuizzes = 
+        markingNewQuizToTry(upSkQuizzes) ||
+        markingSkipQuizToTry(upSkQuizzes);
+      
+      const newState = update(state, { 
+        quizzes: { $set: nextTryQuizzes },
+        
+      })  
+      return newState;
 
     case 'NEXT_QUIZ':
       break;

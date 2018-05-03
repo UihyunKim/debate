@@ -6,7 +6,9 @@ import { initQuizApp } from '../../actions/quiz-actions';
 // import QuizMap from './QuizMap';
 import QuizQuestion from './QuizQuestion';
 import QuizSelect from './QuizSelect';
-import { getRandomInt, markingTheQuizTry } from '../../constants/functions';
+import QuizScore from './QuizScore';
+import QuizResult from './QuizResult';
+import { getRandomInt, markingNewQuizToTry } from '../../constants/functions';
 
 import uuidv1 from 'uuid';
 import update from 'immutability-helper';
@@ -23,7 +25,7 @@ const quizzesMap = () => {
 
   // marking one quiz as try:true ===>> CHNAGE;
   const i = getRandomInt(0, QUIZ.length);
-
+  
   const quizMap = QUIZ.map((el, elIdx) => {
     const answerId = uuidv1();
     const answerEx = el.answer.join();
@@ -43,12 +45,13 @@ const quizzesMap = () => {
       question: el.question.join(),
       allExams: allExs,
       answer: answerId,
+      explanation: el.explanation.join(),
       try: elIdx === i ? true : false,
       status: {
         current: 'new',  // current: 'new', 'try', 'solve', 'skip'
         result: '',   // result: '', 'success', 'fail'
       },
-      result: '',
+      // result: '',
     });
   });
   return quizMap;
@@ -74,7 +77,7 @@ class QuizInit extends Component {
     const quizzesValue = quizzesMap();
     
     // marking one quiz's status as try
-    const qsTryValue = markingTheQuizTry(quizzesValue);
+    const qsTryValue = markingNewQuizToTry(quizzesValue);
     
     const quizAppValue = {
       session: {
@@ -88,7 +91,7 @@ class QuizInit extends Component {
       // flow: start -> select -> check -> result -> start
       flow: 'start',
       quizzes: qsTryValue,
-      curQuiz: quizzesValue.filter(q => q.try)[0]
+      // curQuiz: quizzesValue.filter(q => q.try)[0]
     };
 
     this.props.initQuizApp(quizAppValue);
@@ -97,9 +100,10 @@ class QuizInit extends Component {
   render() {
     return (
       <div>
+        <QuizScore />
         <QuizQuestion />
         <QuizSelect />
-        {/* <QuizResult /> */}
+        <QuizResult />
       </div>
     );
   }

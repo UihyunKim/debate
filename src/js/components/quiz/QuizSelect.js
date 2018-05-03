@@ -8,8 +8,11 @@ import uuidv1 from 'uuid';
 
 const mapStateToProps = state => {
   console.log('State -> props');
+  const current =
+    state.quizApp.quizzes.filter(quiz => (quiz.status.current === 'try'))[0] ||
+    state.quizApp.quizzes.filter(quiz => (quiz.status.current === 'retry'))[0];
   return {
-    curQuiz: state.quizApp.curQuiz,
+    curQuiz: current
   };
 }
 
@@ -30,6 +33,7 @@ class ConnectedSelect extends Component {
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleSkip = this.handleSkip.bind(this);
+    // this.handleNext = this.handleNext.bind(this);
   }
 
   componentWillMount() {
@@ -39,10 +43,13 @@ class ConnectedSelect extends Component {
     })
   }
   
-  
   handleSkip(e) {
     this.props.onSkipQuiz({ id: this.props.curQuiz.id });
   }
+  
+  // handleNext(e) {
+  //   this.props.onNextQuiz({ id: this.props.curQuiz.id });
+  // }
 
   handleChange(e) {
     this.setState(
@@ -102,7 +109,9 @@ class ConnectedSelect extends Component {
         <div>
           <button 
             className="btn btn-primary"
-            onClick={this.handleSkip}>
+            onClick={this.handleSkip} 
+            disabled={this.props.curQuiz.status.current === 'try' ? false : true}
+            >
             건너띄기
           </button>
           <button
@@ -112,6 +121,13 @@ class ConnectedSelect extends Component {
             disabled={!this.state.tryAnswer}
           >
             확인
+          </button>
+          <button
+            className="btn btn-primary"
+            onClick={this.handleNext}
+            // disabled={!this.state.tryAnswer}
+          >
+            다음
           </button>
         </div>
 

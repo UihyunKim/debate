@@ -47,11 +47,11 @@ class ConnectedSelect extends Component {
   handleChange(e) {
     this.setState(
       update(this.state, { tryAnswer: { $set: e.target.value } }), () => {
-        console.log('=== handle Change ========')
-        console.log('----------- this.props ---')
-        console.log(this.props);
-        console.log('----------- this.state ---')
-        console.log(this.state);
+        // console.log('=== handle Change ========')
+        // console.log('----------- this.props ---')
+        // console.log(this.props);
+        // console.log('----------- this.state ---')
+        // console.log(this.state);
       }
     );
   }
@@ -63,11 +63,11 @@ class ConnectedSelect extends Component {
     } else {
       this.props.onFailQuiz({ id: this.props.curQuiz.id })
     }
-    console.log('=== handle Submit ========')
-    console.log('----------- this.props ---')
-    console.log(this.props);
-    console.log('----------- this.state ---')
-    console.log(this.state);
+    // console.log('=== handle Submit ========')
+    // console.log('----------- this.props ---')
+    // console.log(this.props);
+    // console.log('----------- this.state ---')
+    // console.log(this.state);
   }
 
   render() {

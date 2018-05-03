@@ -8,7 +8,7 @@ import QuizQuestion from './QuizQuestion';
 import QuizSelect from './QuizSelect';
 import QuizScore from './QuizScore';
 import QuizResult from './QuizResult';
-import { getRandomInt, markingNewQuizToTry } from '../../constants/functions';
+import { getRandomInt, nextNewQuiz } from '../../constants/functions';
 
 import uuidv1 from 'uuid';
 import update from 'immutability-helper';
@@ -46,12 +46,14 @@ const quizzesMap = () => {
       allExams: allExs,
       answer: answerId,
       explanation: el.explanation.join(),
-      try: elIdx === i ? true : false,
-      status: {
-        current: 'new',  // current: 'new', 'try', 'done', 'skip'
-        result: '',   // result: '', 'success', 'fail'
+      history: {
+        new: true,
+        try: false,
+        reTry: false,
+        done: false,
+        skip: false
       },
-      // result: '',
+      success: null
     });
   });
   return quizMap;
@@ -77,22 +79,19 @@ class QuizInit extends Component {
     const quizzesValue = quizzesMap();
     
     // marking one quiz's status as try
-    const qsTryValue = markingNewQuizToTry(quizzesValue);
+    const qsTryValue = nextNewQuiz(quizzesValue);
     
     const quizAppValue = {
       session: {
         stage: sessionNo,
         end: false,
-        result: ''
+        success: null,
       },
       score: {
         goal: goalNo,
         current: 0
       },
-      // flow: start -> select -> check -> result -> start
-      flow: 'start',
-      quizzes: qsTryValue,
-      // curQuiz: quizzesValue.filter(q => q.try)[0]
+      quizzes: qsTryValue
     };
 
     this.props.initQuizApp(quizAppValue);

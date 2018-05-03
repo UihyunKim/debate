@@ -9,28 +9,32 @@ export const getRandomInt = (min, max) => (
 )
 
 // marking one random quiz's status into try
-export const markingNewQuizToTry = (quizzes) => {
-  // find new quizzes
-  const findNewQs = (quizzes) => {
-    return quizzes.filter(quiz => {
-      return quiz.status.current === 'new';
-    });
-  }
-  const newQuizzes = findNewQs(quizzes);
+export const nextNewQuiz = (quizzes) => {
+  const newQuizzes = (quizzes => (
+    quizzes.filter(quiz=>quiz.history.new)
+  ))(quizzes)
   
   // return until new quiz exists
   if (newQuizzes.length) {
     const theNewIdx = getRandomInt(0, newQuizzes.length);
     const theNewId = newQuizzes[theNewIdx].id;
     
-    // marking the new quiz as status: try
-    const tryQs = quizzes.map(quiz => {
+    // marking the new quiz.history.try
+    const historyTry = quizzes.map(quiz => {
       return quiz.id === theNewId ?
-        update(quiz, { status: { current: { $set: 'try' } } }) :
-        quiz
+        update(quiz, { 
+          history: {
+            new:    { $set: false },
+            try:    { $set: true  },
+            reTry:  { $set: false },
+            done:   { $set: false },
+            skip:   { $set: false } 
+          }
+        })
+        : quiz
     });
     
-    return tryQs;
+    return historyTry;
   }
   
   // NOT having new any more
@@ -38,14 +42,10 @@ export const markingNewQuizToTry = (quizzes) => {
 }
 
 // marking one skip quiz's status into try
-export const markingSkipQuizToTry = (quizzes) => {
-  // find Skip quizzes
-  const findSkipQs = (quizzes) => {
-    return quizzes.filter(quiz => {
-      return quiz.status.current === 'skip';
-    });
-  }
-  const skipQuizzes = findSkipQs(quizzes);
+export const nextSkipQuiz = (quizzes) => {
+  const skipQuizzes = (quizzes => (
+    quizzes.filter(quiz=>quiz.history.skip)
+  ))(quizzes)
   
   // return until skip quiz exists
   if (skipQuizzes.length) {
@@ -53,13 +53,21 @@ export const markingSkipQuizToTry = (quizzes) => {
     const theSkipId = skipQuizzes[theSkipIdx].id;
     
     // marking the skip quiz as status: try
-    const tryQs = quizzes.map(quiz => {
+    const hitoryReTry = quizzes.map(quiz => {
       return quiz.id === theSkipId ?
-        update(quiz, { status: { current: { $set: 'retry' } } }) :
-        quiz
+        update(quiz, { 
+          history: {
+            new:    { $set: false },
+            try:    { $set: false },
+            reTry:  { $set: true  },
+            done:   { $set: false },
+            skip:   { $set: false } 
+          }
+        })
+        : quiz
     });
     
-    return tryQs;
+    return hitoryReTry;
   }
   
   // NOT having new any more

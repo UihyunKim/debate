@@ -1,19 +1,17 @@
 import update from 'immutability-helper';
-import { markingNewQuizToTry, markingSkipQuizToTry } from '../constants/functions';
+import { nextNewQuiz, nextSkipQuiz } from '../constants/functions';
 
 const initialState = {
   session: {
     stage: 0,
     end: false,
-    result: ''
+    success: null,
   },     // a session per week
   score: {
     goal: 0,
     current: 0,
   },       // ex. 10 is goal for this session
-  flow: '',       // quiz flow: start(select+check) -> result
   quizzes: [],    // quizzes by one session (ex, 15)
-  curQuiz: {},    // current trying quiz
 }
 
 const quizReducer = (state = initialState, { type, payload }) => {
@@ -27,42 +25,34 @@ const quizReducer = (state = initialState, { type, payload }) => {
     case 'SUCCESS_QUIZ': {
     
       // update THE QUIZ
-      const theQuizzes = state.quizzes.map(quiz => (
+      const updateQuizzes = state.quizzes.map(quiz => (
         quiz.id === payload.id ?
-          update(quiz, { status: { result: { $set: 'success' } } }, )
+          update(quiz, { 
+            success:  { $set: true  } 
+          })
           : quiz
       ))
 
       // update TOTAL QUIZAPP
       const newState = update(state, {
-        quizzes: { $set: theQuizzes },
-        flow: { $set: 'result' },
+        quizzes: { $set: updateQuizzes },
         score: { current: { $apply: x => ++x } }
       });
       
       return newState;
-
-      // END QUIZ
-      // if (!(state.score.goal - state.score.current)) {
-      //   const newState = update(state, {
-      //     quizzes: { $set: upSuQuizzes },
-      //     score: { current: { $apply: x => ++x } },
-      //     session: { end: { $set: true } }
-      //   })
-      //   return newState;
-      // }
     }
     
     case 'FAIL_QUIZ': {
-      const theQuizzes = state.quizzes.map(quiz => (
+      const updateQuizzes = state.quizzes.map(quiz => (
         quiz.id === payload.id ?
-          update(quiz, {status: {result: { $set: 'fail' } } } )
+          update(quiz, { 
+            success:  { $set: false } 
+          })
           : quiz
       ));
       
       const newState = update(state, {
-        quizzes: { $set: theQuizzes },
-        flow: { $set: 'result' }
+        quizzes: { $set: updateQuizzes },
       });
       
       return newState;
@@ -70,16 +60,22 @@ const quizReducer = (state = initialState, { type, payload }) => {
     
     case 'SKIP_QUIZ': {
       // marking the quiz's result as 'skip'
-      const newQuizzes = state.quizzes.map(quiz => (
+      const updateQuizzes = state.quizzes.map(quiz => (
         quiz.id === payload.id ?
-          update(quiz, { status: { current: { $set: 'skip' } } } )
+          update(quiz, { history: { 
+            new:    { $set: false },
+            try:    { $set: false },
+            reTry:  { $set: false },
+            done:   { $set: false },
+            skip:   { $set: true  }
+          } } )
           : quiz
       ))
       
       // marking next quiz as 'try'
       const nextTryQuizzes = 
-        markingNewQuizToTry(newQuizzes) ||
-        markingSkipQuizToTry(newQuizzes);
+        nextNewQuiz(updateQuizzes) ||
+        nextSkipQuiz(updateQuizzes);
       
       const newState = update(state, {
         quizzes: { $set: nextTryQuizzes },
@@ -89,17 +85,25 @@ const quizReducer = (state = initialState, { type, payload }) => {
     }
     
     case 'NEXT_QUIZ': {
-      // update the quiz status as done
-      const newQuizzes = state.quizzes.map(quiz => (
+      // update the quiz history as done
+      const updateQuizzes = state.quizzes.map(quiz => (
         quiz.id === payload.id ?
-          update(quiz, { status: { current: { $set: 'done' } } } )
+          update(quiz, { 
+            history: {
+              new:    { $set: false },
+              try:    { $set: false },
+              reTry:  { $set: false },
+              done:   { $set: true  },
+              skip:   { $set: false } 
+            }
+          })
           : quiz
       ))
       
-      // marking next quiz as 'try'
+      // FIND next(new and then, skip) quiz
       const nextTryQuizzes = 
-        markingNewQuizToTry(newQuizzes) ||
-        markingSkipQuizToTry(newQuizzes) ||
+        nextNewQuiz(updateQuizzes) ||
+        nextSkipQuiz(updateQuizzes) ||
         null;  // no more quizzes, fail session
       
       // SUCCESS SESSION
@@ -107,7 +111,7 @@ const quizReducer = (state = initialState, { type, payload }) => {
         const newState = update(state, {
           session: {
             end: { $set: true },
-            result: { $set: 'success' }
+            success: { $set: true }
           }
         });
         

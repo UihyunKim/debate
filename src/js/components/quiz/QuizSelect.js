@@ -7,17 +7,15 @@ import update from 'immutability-helper';
 import uuidv1 from 'uuid';
 
 const mapStateToProps = state => {
-  console.log('State -> props');
   const current =
-    state.quizApp.quizzes.filter(quiz => (quiz.status.current === 'try'))[0] ||
-    state.quizApp.quizzes.filter(quiz => (quiz.status.current === 'retry'))[0];
+    state.quizApp.quizzes.filter(quiz => (quiz.history.try))[0] ||
+    state.quizApp.quizzes.filter(quiz => (quiz.history.reTry))[0];
   return {
     curQuiz: current
   };
 }
 
 const mapDispatchToProps = dispatch => {
-  console.log('Dispatch -> props');
   return {
     onSuccessQuiz: select => dispatch(successQuiz(select)),
     onFailQuiz: select => dispatch(failQuiz(select)),
@@ -40,7 +38,6 @@ class ConnectedSelect extends Component {
   componentWillMount() {
     this.setState({id: this.props.curQuiz.id}, () => {
       console.log("=== componentWillMount ===");
-      console.log(this.state);
     })
   }
   
@@ -55,13 +52,7 @@ class ConnectedSelect extends Component {
 
   handleChange(e) {
     this.setState(
-      update(this.state, { select: { $set: e.target.value } }), () => {
-        // console.log('=== handle Change ========')
-        // console.log('----------- this.props ---')
-        // console.log(this.props);
-        // console.log('----------- this.state ---')
-        // console.log(this.state);
-      }
+      update(this.state, { select: { $set: e.target.value } })
     );
   }
   
@@ -72,11 +63,9 @@ class ConnectedSelect extends Component {
     } else {
       this.props.onFailQuiz({ id: this.props.curQuiz.id })
     }
-    // console.log('=== handle Submit ========')
-    // console.log('----------- this.props ---')
-    // console.log(this.props);
-    // console.log('----------- this.state ---')
-    // console.log(this.state);
+    this.setState(
+      update(this.state, { select: { $set: null } })
+    );
   }
 
   render() {
@@ -112,7 +101,7 @@ class ConnectedSelect extends Component {
           <button 
             className="btn btn-primary"
             onClick={this.handleSkip} 
-            disabled={this.props.curQuiz.status.current === 'try' ? false : true}
+            disabled={this.props.curQuiz.history.try ? false : true}
             >
             건너띄기
           </button>
@@ -127,7 +116,7 @@ class ConnectedSelect extends Component {
           <button
             className="btn btn-primary"
             onClick={this.handleNext}
-            disabled={!this.props.curQuiz.status.result.length}
+            disabled={this.props.curQuiz.success === null}
           >
             다음
           </button>

@@ -35,22 +35,24 @@ class ConnectedSelect extends Component {
     this.handleNext = this.handleNext.bind(this);
   }
 
-  componentWillMount() {
-    this.setState({id: this.props.curQuiz.id}, () => {
-      console.log("=== componentWillMount ===");
-    })
-  }
-  
   handleSkip(e) {
     this.props.onSkipQuiz({ id: this.props.curQuiz.id });
-    this.setState( update(this.state, { select: {$set: ''}}) )
+    this.setState( 
+      update(this.state, { select: {$set: null}}) 
+    )
   }
   
   handleNext(e) {
     this.props.onNextQuiz({ id: this.props.curQuiz.id });
+    this.setState(
+      update(this.state, { select: { $set: null } })
+    );
   }
 
   handleChange(e) {
+    // prevent change radio button AFTER quiz result
+    if (this.props.curQuiz.success !== null) return false;
+    
     this.setState(
       update(this.state, { select: { $set: e.target.value } })
     );
@@ -63,13 +65,56 @@ class ConnectedSelect extends Component {
     } else {
       this.props.onFailQuiz({ id: this.props.curQuiz.id })
     }
-    this.setState(
-      update(this.state, { select: { $set: null } })
-    );
   }
-
+  
+  
+  
   render() {
     const curQuiz = this.props.curQuiz;
+    
+    const skipBtn = () => {
+      if (curQuiz.success === null) {
+        return (
+          <button 
+            className="btn btn-primary"
+            onClick={this.handleSkip} 
+            disabled={this.props.curQuiz.history.try ? false : true}
+          >
+            건너띄기
+          </button>
+        )
+      }
+    }
+    
+    const checkBtn = () => {
+      if (curQuiz.success === null) {
+        return (
+          <button
+            className="btn btn-primary"
+            type="submit"
+            form="selectForm"
+            disabled={!this.state.select}
+          >
+            확인
+          </button>
+        )
+      }
+    }
+    
+    const nextBtn = () => {
+      if (curQuiz.success !== null) {
+        return (
+          <button
+            className="btn btn-primary"
+            onClick={this.handleNext}
+            disabled={this.props.curQuiz.success === null}
+          >
+            다음
+          </button>
+        )
+      }
+    }
+    
     return (
       <div>
         {/* EXAMPLES */}
@@ -78,13 +123,13 @@ class ConnectedSelect extends Component {
             curQuiz.allExams.map(ex => (
               <div className="form-check" key={ex.id}>
                 <input
-                  className="form-check-input"
-                  type="radio"
-                  name="examples"
-                  id={ex.id}
-                  value={ex.id}
-                  onChange={this.handleChange}
-                // checked={}
+                  className="form-check-input" 
+                  type="radio" 
+                  name="examples" 
+                  id={ex.id} 
+                  value={ex.id} 
+                  onChange={this.handleChange} 
+                  checked={ex.id === this.state.select} 
                 />
                 <label
                   className="form-check-label"
@@ -98,28 +143,9 @@ class ConnectedSelect extends Component {
 
         {/* CHECK PANNEL */}
         <div>
-          <button 
-            className="btn btn-primary"
-            onClick={this.handleSkip} 
-            disabled={this.props.curQuiz.history.try ? false : true}
-            >
-            건너띄기
-          </button>
-          <button
-            className="btn btn-primary"
-            type="submit"
-            form="selectForm"
-            disabled={!this.state.select}
-          >
-            확인
-          </button>
-          <button
-            className="btn btn-primary"
-            onClick={this.handleNext}
-            disabled={this.props.curQuiz.success === null}
-          >
-            다음
-          </button>
+          {skipBtn()}
+          {checkBtn()}
+          {nextBtn()}
         </div>
 
       </div>

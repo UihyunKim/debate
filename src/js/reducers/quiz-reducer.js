@@ -1,9 +1,10 @@
 import update from 'immutability-helper';
-import { nextNewQuiz, nextSkipQuiz } from '../constants/functions';
+import { nextNewQuiz, nextSkipQuiz } from '../components/quiz/functions/button';
 
 const initialState = {
   session: {
     stage: 0,
+    start: true,
     end: false,
     success: null,
   },     // a session per week
@@ -20,6 +21,16 @@ const quizReducer = (state = initialState, { type, payload }) => {
 
     case 'INIT_QUIZ_APP': {
       return update(state, { $set: payload });
+    }
+    
+    case 'START_QUIZ': {
+      const newState = update(state, {
+        session: {
+          start: {$set: false}
+        }
+      })
+      
+      return newState;
     }
 
     case 'SUCCESS_QUIZ': {
@@ -73,12 +84,12 @@ const quizReducer = (state = initialState, { type, payload }) => {
       ))
       
       // marking next quiz as 'try'
-      const nextTryQuizzes = 
+      const findNextQuiz = 
         nextNewQuiz(updateQuizzes) ||
         nextSkipQuiz(updateQuizzes);
       
       const newState = update(state, {
-        quizzes: { $set: nextTryQuizzes },
+        quizzes: { $set: findNextQuiz },
       })  
   
       return newState; 
@@ -110,8 +121,8 @@ const quizReducer = (state = initialState, { type, payload }) => {
       if (state.score.goal === state.score.current) {
         const newState = update(state, {
           session: {
-            end: { $set: true },
-            success: { $set: true }
+            end:      { $set: true },
+            success:  { $set: true }
           }
         });
         
@@ -129,8 +140,8 @@ const quizReducer = (state = initialState, { type, payload }) => {
       // FAIL SESSION
       const newState = update(state, {
         session: { 
-          end: { $set: true },
-          result: { $set: 'fail' }
+          end:      { $set: true  },
+          success:  { $set: false }
         }
       })
       return newState;

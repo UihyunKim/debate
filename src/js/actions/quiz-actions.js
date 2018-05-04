@@ -4,6 +4,12 @@ export const initQuizApp = quiz => (
   }
 )
 
+export const startQuiz = quiz => (
+  {
+    type: 'START_QUIZ', payload: quiz
+  }
+)
+
 export const successQuiz = quiz => (
   {
     type: 'SUCCESS_QUIZ', payload: quiz
@@ -27,3 +33,4 @@ export const nextQuiz = quiz => (
     type: 'NEXT_QUIZ', payload: quiz
   }
 )
+

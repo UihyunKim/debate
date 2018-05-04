@@ -13,13 +13,13 @@ const mapStateToProps = state => {
   };
 }
 
-const ConnectedQuiz = ({ curQuiz }) => (
+const ConnectedQuestion = ({ curQuiz }) => (
   <div>
     Q: {curQuiz.question}
   </div>
 )
 
-const QuizQuestion = connect(mapStateToProps)(ConnectedQuiz);
+const QuizQuestion = connect(mapStateToProps)(ConnectedQuestion);
 
 export default QuizQuestion;
 

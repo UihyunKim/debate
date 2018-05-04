@@ -10,16 +10,16 @@ const mapStateToProps = state => {
   };
 }
 
-const ConnectedQuiz = ({ score }) => (
-  <div>
+const ConnectedScore = ({ score }) => (
+  <div key={uuidv1()}>
     SCORE: {score}
   </div>
 )
 
-const QuizScore = connect(mapStateToProps)(ConnectedQuiz);
+const QuizScore = connect(mapStateToProps)(ConnectedScore);
 
 export default QuizScore;
 
-// ConnectedQuiz.propTypes = {
+// ConnectedScore.propTypes = {
 //   curQuiz: PropTypes.array.isRequired,
 // }

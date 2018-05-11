@@ -21,8 +21,10 @@ if ( $the_query->have_posts() ) {
 echo"<script type=\"text/javascript\">
         const QUIZ = " . json_encode($q_data) . ";
     </script>";
+    
 ?>
 
 <div id="app"></div>
+<div id="ajaxCall">AjaxCall</div>
 
 <?php get_footer(); ?>

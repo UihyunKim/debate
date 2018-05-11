@@ -1,6 +1,7 @@
-// import $ from 'jquery';
-// window.jQuery = $;
-// window.$ = $;
+import $ from 'jquery';
+window.jQuery = $;
+window.$ = $;
+
 import 'bootstrap';
 import '../sass/style.scss';
 import 'animate.css';
@@ -42,7 +43,6 @@ render(
 function run() {
   // do something
   // console.log('ready');
-  
   
   
 }

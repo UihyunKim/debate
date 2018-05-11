@@ -5,8 +5,7 @@ import { connect } from 'react-redux';
 import { initQuizApp } from '../../actions/quiz-actions';
 
 // functions
-import { nextNewQuiz } from './functions/button';
-import { quizzesInit } from './functions/init';
+import { quizAppInit } from './functions/init';
 
 // components
 import QuizSessionStart from "./QuizSessionStart";
@@ -15,7 +14,9 @@ import QuizSessionEnd from "./QuizSessionEnd";
 
 // utils
 import uuidv1 from 'uuid';
-
+import axios from 'axios';
+import Qs from 'qs';
+import update from 'immutability-helper';
 
 const mapStateToProps = state => {
   return {
@@ -34,57 +35,48 @@ class connectedQuizInit extends Component {
     super();
   }
 
-  componentWillMount() {
-    /**
-      * @todo need to get value from back end
-      */
-    const sessionNo = 1;
-    /**
-     *  @todo need to get value from back end
-     */
-    const goalNo = 2;
+  componentWillMount() {} // end componentWillMount()
 
-    // init quizzes structure
-    const quizzesValue = quizzesInit();
-
-    // marking one quiz's status as try
-    const qsTryValue = nextNewQuiz(quizzesValue);
-
-    const quizAppValue = {
-      session: {
-        stage: sessionNo,
-        start: true,
-        end: false,
-        success: null,
-      },
-      score: {
-        goal: goalNo,
-        current: 0
-      },
-      quizzes: qsTryValue
-    };
-
-    this.props.initQuizApp(quizAppValue);
-  } // end componentWillMount()
+  componentDidMount() {
+    const data = { action: 'get_quizzes' }
+    axios.post(jdebateAjax.ajax_url, Qs.stringify(data))
+      .then(response => {
+        const newState = quizAppInit(response.data);
+        this.props.initQuizApp(newState);
+      })
+      .catch(error => {
+        console.log(error);
+        const newState = update(this.props.quizApp, {
+          session: {
+            error: {
+              $set: true
+            }
+          }
+        })
+        this.props.initQuizApp(newState);
+      });
+  }
 
   render() {
     // WATCHOUT here renders twice, because of componentWillMount
-    if (this.props.quizApp.quizzes.length) {
-      // console.log(this.props.quizApp)
-    }
+    // if (this.props.quizApp.quizzes.length) {
+    //   // console.log(this.props.quizApp)
+    // }
 
     const view = ((session) => {
-      if (session.start) {
+      const { error, isLoaded, start, end, success } = session;
+      if (error) {
+        return <h1>error</h1>;
+      } else if (!isLoaded) {
+        return <h1>Loading...</h1>;
+      } else if (start) {
         return <QuizSessionStart />;
-      }
-      else if (!(session.start) && !(session.end)) {
+      } else if (!start && !end) {
         return <QuizView />;
-      }
-      else if (session.end) {
+      } else if (end) {
         return <QuizSessionEnd />;
-      }
-      else {
-        return '<h1>session view error</h1>';
+      } else {
+        return <h1>session view error</h1>;
       }
     })(this.props.quizApp.session);
 

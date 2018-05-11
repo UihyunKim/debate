@@ -1,16 +1,51 @@
 // functions
 import { getRandomInt } from '../../../global-functions/functions';
+import { nextNewQuiz } from './button';
 
 // utils
 import uuidv1 from 'uuid';
 
+export const quizAppInit = (ajaxData) => {
+  /**
+      * @todo need to get value from back end
+      */
+  const sessionNo = 1;
+  /**
+   *  @todo need to get value from back end
+   */
+  const goalNo = 2;
 
-// Fetch(or axios) space
-export const quizzesInit = () => {
+  // init quizzes structure
+  const quizzesValue = quizzesInit(ajaxData);
+
+  // marking one quiz's status as try
+  const qsTryValue = nextNewQuiz(quizzesValue);
+
+  const quizAppValue = {
+    session: {
+      stage: sessionNo,
+      error: null,
+      isLoaded: true,
+      start: true,
+      end: false,
+      success: null,
+    },
+    score: {
+      goal: goalNo,
+      current: 0
+    },
+    quizzes: qsTryValue
+  };
+
+  return quizAppValue;
+  // this.props.initQuizApp(quizAppValue);
+}
+
+const quizzesInit = (ajaxData) => {
   // marking one quiz as try:true ===>> CHNAGE;
-  const i = getRandomInt(0, QUIZ.length);
+  const i = getRandomInt(0, ajaxData.length);
 
-  const quizzes = QUIZ.map((el, elIdx) => {
+  const quizzes = ajaxData.map((el, elIdx) => {
     const answerId = uuidv1();
     const answerEx = el.answer.join();
 

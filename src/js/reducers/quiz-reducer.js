@@ -4,7 +4,9 @@ import { nextNewQuiz, nextSkipQuiz } from '../components/quiz/functions/button';
 const initialState = {
   session: {
     stage: 0,
-    start: true,
+    error: null,
+    isLoaded: false,
+    start: false,
     end: false,
     success: null,
   },     // a session per week

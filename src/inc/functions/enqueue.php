@@ -1,20 +1,24 @@
 <?php
 // enqueue style
-function jdebate_styles_enqueue() {
-  wp_enqueue_style (
-    'main-styles', 
-    get_template_directory_uri() . '/inc/styles/main.css' ,
-    array(), 
-    filemtime(get_template_directory() . '/inc/styles/main.css'), 
-    false
-  );
-  wp_enqueue_script( 
-    'bundle-js', 
-    get_template_directory_uri() . '/inc/js/bundle.js', 
-    array(), 
-    '1.0.0', 
-    true 
-  );
+function jdebate_styles_enqueue()
+{
+    wp_enqueue_style(
+        'main-styles',
+        get_template_directory_uri() . '/inc/styles/main.css',
+        array(),
+        filemtime(get_template_directory() . '/inc/styles/main.css'),
+        false
+    );
+    wp_enqueue_script(
+        'bundle-js',
+        get_template_directory_uri() . '/inc/js/bundle.js',
+        array(),
+        '1.0.0',
+        true
+    );
+    wp_localize_script('bundle-js', 'jdebateAjax', array(
+        'ajax_url' => admin_url('admin-ajax.php'),
+    ));
+
 }
 add_action('wp_enqueue_scripts', 'jdebate_styles_enqueue');
-

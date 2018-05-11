@@ -55,3 +55,17 @@ else if (document.addEventListener) document.addEventListener('DOMContentLoaded'
 else document.attachEvent('onreadystatechange', function () {
   if (document.readyState == 'complete') run();
 });
+
+jQuery(document).on('click', '#get-data', function () {
+  jQuery.ajax({
+    url: jdebateAjax.ajax_url,
+    type: 'post',
+    data: {
+      action: 'get_quizzes',
+    },
+    success: function (response) {
+      console.log(response)
+    }
+  });
+})
+

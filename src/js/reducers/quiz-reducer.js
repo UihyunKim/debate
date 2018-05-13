@@ -36,7 +36,6 @@ const quizReducer = (state = initialState, { type, payload }) => {
     }
 
     case 'SUCCESS_QUIZ': {
-    
       // update THE QUIZ
       const updateQuizzes = state.quizzes.map(quiz => (
         quiz.id === payload.id ?

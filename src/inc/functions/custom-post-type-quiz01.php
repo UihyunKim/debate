@@ -1,5 +1,9 @@
 <?php
-function jdebate_custom_post_type()
+
+// ============
+// QUIZ 01
+// ============
+function jdebate_custom_post_type_quiz01()
 {
     $labels = array(
         'name' => 'Quiz01',
@@ -46,7 +50,7 @@ function jdebate_custom_post_type()
     );
     register_post_type('quiz01', $args);
 }
-add_action('init', 'jdebate_custom_post_type');
+add_action('init', 'jdebate_custom_post_type_quiz01');
 
 // Column view in admin pannel
 function jdebate_quiz01_columns($columns)

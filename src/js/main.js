@@ -32,18 +32,29 @@ import QuizApp from './components/quiz/QuizApp';
 //   });
 // })(jQuery);
 
-render(
-  <Provider store={store}>
-    <QuizApp />
-  </Provider>,
-  document.getElementById('app')
-);
 
 
 function run() {
   // do something
-  // console.log('ready');
+  const studentApp = document.getElementById('student-app') || null;
+  const teacherApp = document.getElementById('teacher-app') || null;
   
+  if (studentApp) {
+    render(
+      <Provider store={store}>
+        <QuizApp />
+      </Provider>,
+      studentApp
+    );
+  }
+  if (teacherApp) {
+    render(
+      <Provider store={store}>
+        <QuizApp />
+      </Provider>,
+      teacherApp
+    );
+  }
   
 }
 
@@ -51,10 +62,7 @@ function run() {
 if (document.readyState != 'loading') run();
 // modern browsers
 else if (document.addEventListener) document.addEventListener('DOMContentLoaded', run);
-// IE <= 8
-else document.attachEvent('onreadystatechange', function () {
-  if (document.readyState == 'complete') run();
-});
+
 
 jQuery(document).on('click', '#get-data', function () {
   jQuery.ajax({
@@ -62,6 +70,33 @@ jQuery(document).on('click', '#get-data', function () {
     type: 'post',
     data: {
       action: 'get_quizzes',
+    },
+    success: function (response) {
+      console.log(response)
+    }
+  });
+})
+
+jQuery(document).on('click', '#get-vote-teacher', function () {
+  jQuery.ajax({
+    url: jdebateAjax.ajax_url,
+    type: 'post',
+    data: {
+      action: 'jdebate_get_current_vote',
+    },
+    success: function (response) {
+      console.log(response)
+    }
+  });
+})
+
+jQuery(document).on('click', '#add-agenda', function () {
+  jQuery.ajax({
+    url: jdebateAjax.ajax_url,
+    type: 'post',
+    data: {
+      action: 'jdebate_add_agenda',
+      meta: 123,
     },
     success: function (response) {
       console.log(response)

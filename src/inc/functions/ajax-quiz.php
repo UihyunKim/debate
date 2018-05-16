@@ -1,4 +1,6 @@
 <?php
+
+// ajax call test function
 function jdebate_ajax_calls()
 {
     do_action('jdebate_ajax_calls');

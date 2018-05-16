@@ -55,7 +55,8 @@ function jdebate_vote_columns($columns)
         'cb' => $columns['cb'],
         'type' => 'Type',
         'title_meta' => 'Title',
-        'open' => 'Open',
+        'before' => 'Before open',
+        'after' => 'After open',
         'members' => 'Members IDs',
         'voter' => 'Voter ID',
         'when' => 'When',
@@ -80,10 +81,16 @@ function jdebate_vote_column($column, $post_id)
         echo $title_meta;
     }
 
-    // Open column
-    if ('open' === $column) {
-        $open = get_post_meta($post_id, 'v30_open_close', true);
-        echo $open;
+    // Before debate open column
+    if ('before' === $column) {
+        $before = get_post_meta($post_id, 'v30_before_open_close', true);
+        echo $before;
+    }
+    
+    // After debate open column
+    if ('after' === $column) {
+        $after = get_post_meta($post_id, 'v35_after_open_close', true);
+        echo $after;
     }
 
     // Target column

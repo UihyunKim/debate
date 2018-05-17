@@ -12,6 +12,7 @@ import { render } from 'react-dom';
 import { Provider } from 'react-redux';
 import store from './store/store';
 import QuizApp from './components/quiz/QuizApp';
+import TeacherApp from './components/teacher-container/TeacherApp';
 
 // import 'fullpage.js'
 // import 'fullpage.js/dist/jquery.fullpage.css'
@@ -50,7 +51,7 @@ function run() {
   if (teacherApp) {
     render(
       <Provider store={store}>
-        <QuizApp />
+        <TeacherApp />
       </Provider>,
       teacherApp
     );

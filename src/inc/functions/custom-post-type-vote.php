@@ -53,6 +53,7 @@ function jdebate_vote_columns($columns)
 {
     $columns = array(
         'cb' => $columns['cb'],
+        'session' => 'Session',
         'type' => 'Type',
         'title_meta' => 'Title',
         'before' => 'Before open',
@@ -69,6 +70,12 @@ add_filter('manage_vote_posts_columns', 'jdebate_vote_columns');
 // Column data in admin pannel
 function jdebate_vote_column($column, $post_id)
 {
+    // No. column
+    if ('session' === $column) {
+        $session = get_post_meta($post_id, 'v05_session_no', true);
+        echo $session;
+    }
+    
     // No. column
     if ('type' === $column) {
         $agenda = get_post_meta($post_id, 'v10_agenda_vote', true);

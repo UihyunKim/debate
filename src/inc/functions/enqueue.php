@@ -19,6 +19,5 @@ function jdebate_styles_enqueue()
     wp_localize_script('bundle-js', 'jdebateAjax', array(
         'ajax_url' => admin_url('admin-ajax.php'),
     ));
-
 }
 add_action('wp_enqueue_scripts', 'jdebate_styles_enqueue');

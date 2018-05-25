@@ -2,7 +2,8 @@ const path = require('path');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const webpack = require('webpack');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-const dest = '/opt/lampp/htdocs/wp-multi/wp-content/themes/jesusdebate';
+// const dest = '/opt/lampp/htdocs/wp-multi/wp-content/themes/jesusdebate';
+const dest = '/opt/lampp/htdocs/wp-rest/wp-content/themes/jesusdebate';
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 
 const pathsToClean = ['jesusdebate'];

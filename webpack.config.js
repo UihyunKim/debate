@@ -9,7 +9,7 @@ const CleanWebpackPlugin = require('clean-webpack-plugin');
 const pathsToClean = ['jesusdebate'];
 
 const cleanOptions = {
-  root: '/opt/lampp/htdocs/wp-multi/wp-content/themes',
+  root: '/opt/lampp/htdocs/wp-rest/wp-content/themes',
   verbose: true,
   dry: false
 }

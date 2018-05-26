@@ -1,15 +1,13 @@
 <?php
 // Redirect users who arent logged in...
-function jdebate_logged_in_only() {
-  global $pagenow;
-  var_dump($pagenow);
-  var_dump(is_user_logged_in());
-  global $wp;
-  echo '$wp->request: ' . home_url( $wp->request );
+function jdebate_logged_in_only()
+{
+    $allowed = preg_match('/\/member-/', $_SERVER['REQUEST_URI']) ? true : false;
 
-  // Check to see if user in not logged in and not on the login page
-  if( !is_user_logged_in() && $pagenow != 'wp-login.php' ) {
-    auth_redirect();
-  }
+    if (!is_user_logged_in() && !$allowed) {
+        wp_redirect(home_url('member-login'));
+        die;
+    }
+
 }
-add_action( 'wp', 'jdebate_logged_in_only' ); 
+add_action('template_redirect', 'jdebate_logged_in_only');
